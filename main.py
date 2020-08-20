@@ -2,7 +2,6 @@ import requests
 import re
 import sys
 import os
-from skimage import io
 
 ##Settings
 server="202.113.160.165:9081"
