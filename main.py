@@ -2,6 +2,7 @@ import requests
 import re
 import sys
 import os
+import json
 
 ##Settings
 server_list = [
@@ -13,20 +14,33 @@ server=server_list[int(sys.argv[1])-1]
 url_cx="http://"+server+"/KWService/zklqcx.do"
 url_jg="http://"+server+"/KWService/zklqjg.do"
 
-#ksh="2005010348"
-#zwh="01"
 ksh=sys.argv[2]
 zwh=sys.argv[3]
 
-#添加请求头
-headers = {
-	'Host':server,
-	'Origin':'http://'+server,
-    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36',
-	'Referer':url_cx,
-	'Cookie':'JSESSIONID=1C4674DD1D05566E8044F4C0EC67EE91; BIGipServergaokaochengjifabu=2244520128.37919.0000'
-	
-}
+def getCookie():
+	headers = {
+		'Host':server,
+		'Origin':'http://'+server,
+		'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36'
+	}
+	req = requests.get(url_cx, headers=headers, verify=False)
+	cookies = requests.utils.dict_from_cookiejar(req.cookies)
+	cf = open(r"Cookies","wb")
+	cookies_str=json.dumps(cookies)
+	cf.write(cookies_str.encode('gbk'))
+	return cookies_str
+
+##取Cookie开始
+
+cookie = getCookie()
+cookie = cookie.replace('{"','')
+cookie = cookie.replace('"}','')
+cookie = cookie.replace('", "',';')
+cookie = cookie.replace('": "','=')
+
+##取Cookie结束
+
+print(cookie)
 
 ##验证码部分开始
 
@@ -34,6 +48,17 @@ os.system("start code.py "+sys.argv[1])
 yzm=input("请输入验证码：")
 
 ##验证码部分结束
+
+
+#添加请求头
+headers = {
+	'Host':server,
+	'Origin':'http://'+server,
+    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36',
+	'Referer':url_cx,
+	'Cookie':cookie
+	
+}
 
 ##查询部分开始（POST）
 
@@ -76,4 +101,6 @@ else:
 	print("\t考生姓名："+name+"\n\t录取批次："+lqpc+"\n\t录取学校："+lqxx)
 print("-------------------------------------------------------")
 ##查询部分结束
-os.system("pause>>nul")
+os.system("pause>nul")
+
+	
