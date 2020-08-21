@@ -58,7 +58,7 @@ def showImage():
 	img = img.convert('RGBA')
 	pixdata = img.load()
 	up=210 #上阈值
-	down=35 #下阈值
+	down=25 #下阈值
 	for y in range(img.size[1]):
 		for x in range(img.size[0]):
 			#print(pixdata[x, y])
