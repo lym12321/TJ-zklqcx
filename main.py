@@ -4,12 +4,19 @@ import sys
 import os
 
 ##Settings
-server="202.113.160.165:9081"
+server_list = [
+	'111.160.75.143:9081',
+	'221.238.12.35:9081',
+	'202.113.160.165:9081'
+]
+server=server_list[int(sys.argv[1])-1]
 url_cx="http://"+server+"/KWService/zklqcx.do"
 url_jg="http://"+server+"/KWService/zklqjg.do"
 
-ksh=sys.argv[1]
-zwh=sys.argv[2]
+#ksh="2005010348"
+#zwh="01"
+ksh=sys.argv[2]
+zwh=sys.argv[3]
 
 #添加请求头
 headers = {
@@ -17,13 +24,13 @@ headers = {
 	'Origin':'http://'+server,
     'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36',
 	'Referer':url_cx,
-	'Cookie':'JSESSIONID=C3D099CC3FA539EEAF9F47374AA4AA25; BIGipServergaokaochengjifabu=2244520128.37919.0000'
+	'Cookie':'JSESSIONID=1C4674DD1D05566E8044F4C0EC67EE91; BIGipServergaokaochengjifabu=2244520128.37919.0000'
 	
 }
 
 ##验证码部分开始
 
-os.system("start code.py")
+os.system("start code.py "+sys.argv[1])
 yzm=input("请输入验证码：")
 
 ##验证码部分结束
@@ -38,6 +45,7 @@ data={
 res = requests.post(url=url_jg,headers=headers,data=data)
 #print(res.text)
 print("----------------------查询结果-------------------------")
+print("\t服务器："+server)
 print("\t考生号："+ksh+"\n\t座位号："+zwh+"\n\t验证码："+yzm)
 buff=res.text
 buff = buff.replace('\n','')
