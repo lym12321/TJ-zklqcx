@@ -8,8 +8,6 @@ server="202.113.160.165:9081"
 url_cx="http://"+server+"/KWService/zklqcx.do"
 url_jg="http://"+server+"/KWService/zklqjg.do"
 
-#ksh="2005010348"
-#zwh="01"
 ksh=sys.argv[1]
 zwh=sys.argv[2]
 
